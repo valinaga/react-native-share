@@ -74,9 +74,16 @@ public abstract class ShareIntent {
     protected void openIntentChooser() throws ActivityNotFoundException {
         System.out.println(this.getIntent());
         System.out.println(this.getIntent().getExtras());
-        Intent chooser = Intent.createChooser(this.getIntent(), this.chooserTitle);
+        // Intent chooser = Intent.createChooser(this.getIntent(), this.chooserTitle);
+        // chooser.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        // this.reactContext.startActivity(chooser);
+
+        Intent chooser = new Intent();
         chooser.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        this.reactContext.startActivity(chooser);
+        chooser.setAction(android.content.Intent.ACTION_VIEW);
+        Uri uri = (Uri) this.getIntent().getParcelableExtra("android.intent.extra.STREAM");
+        chooser.setDataAndType(uri, "application/epub+zip");
+        this.reactContext.startActivity(chooser);        
     }
     protected boolean isPackageInstalled(String packagename, Context context) {
         PackageManager pm = context.getPackageManager();
